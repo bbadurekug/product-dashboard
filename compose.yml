@@ -1,0 +1,91 @@
+services:
+  pd-db:
+    image: postgres:17-alpine
+    container_name: pd-db
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - back-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  db-seed:
+    image: postgres:17-alpine
+    profiles:
+      - tools
+    networks:
+      - back-net
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    command: >
+      psql -h pd-db -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+      -c "INSERT INTO products (name, price) VALUES ('Widget', 9.99), ('Gadget', 24.99), ('Doohickey', 4.49)"
+    depends_on:
+      pd-db:
+        condition: service_healthy
+
+  pd-cache:
+    image: redis:7-alpine
+    container_name: pd-cache
+    restart: always
+    networks:
+      - back-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pd-backend:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+      args:
+        IMAGE_VERSION: v2
+    container_name: pd-api-a
+    restart: always
+    environment:
+      - INSTANCE_ID=1
+      - DB_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pd-db:5432/${POSTGRES_DB}
+      - REDIS_URL=redis://pd-cache:6379
+    networks:
+      back-net:
+        aliases:
+          - backend
+    depends_on:
+      pd-db:
+        condition: service_healthy
+      pd-cache:
+        condition: service_healthy
+
+  pd-frontend:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+      args:
+        NGINX_VERSION: alpine
+    container_name: pd-frontend
+    restart: always
+    ports:
+      - "${APP_PORT}:80"
+    networks:
+      - front-net
+      - back-net
+
+networks:
+  front-net:
+    driver: bridge
+  back-net:
+    driver: bridge
+
+volumes:
+  pg-data:

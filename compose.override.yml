@@ -1,0 +1,8 @@
+services:
+  pd-backend:
+    volumes:
+      - ./app:/app
+    environment:
+      - NODE_ENV=development
+      - DEBUG=1
+    command: node --watch ./backend/server.js
