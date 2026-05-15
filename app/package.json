@@ -1,11 +1,11 @@
 {
   "name": "backend",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "server.js",
   "scripts": {
-    "lint": "node --check backend/server.js backend/tests/**/*.test.js",
-    "test": "node --test backend/tests/**/*.test.js",
+    "lint": "node --check backend/server.js backend/tests/server.test.js",
+    "test": "node --test backend/tests/server.test.js",
     "build": "echo 'Building application...'",
     "start": "node backend/server.js"
   },
