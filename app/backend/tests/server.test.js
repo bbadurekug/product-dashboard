@@ -13,6 +13,9 @@ const {
     redis
 } = require('../server.js');
 
+if (pg && typeof pg.end === 'function') pg.end().catch(() => {});
+if (redis && typeof redis.disconnect === 'function') redis.disconnect();
+
 function createMockResponse(t) {
     const res = {
         status: () => res,
