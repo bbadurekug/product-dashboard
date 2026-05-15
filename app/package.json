@@ -4,10 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "lint": "node --check server.js tests/**/*.test.js",
-    "test": "node --test tests/**/*.test.js",
+    "lint": "node --check backend/server.js backend/tests/**/*.test.js",
+    "test": "node --test backend/tests/**/*.test.js",
     "build": "echo 'Building application...'",
-    "start": "node server.js"
+    "start": "node backend/server.js"
   },
   "keywords": [],
   "author": "",
