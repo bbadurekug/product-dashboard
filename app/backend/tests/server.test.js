@@ -10,7 +10,8 @@ const {
     handlePostItems,
     handleGetStats,
     pg,
-    redis
+    redis,
+    mySubtract
 } = require('../server.js');
 
 if (pg && typeof pg.end === 'function') pg.end().catch(() => {});
@@ -25,6 +26,11 @@ function createMockResponse(t) {
     t.mock.method(res, 'json');
     return res;
 }
+
+test('Odejmowanie', () => {
+    assert.strictEqual(mySubtract(1, 2), -1);
+    assert.strictEqual(mySubtract(2, 1), 1);
+});
 
 //Walidacja
 test('Walidacja nazwy nowego produktu', () => {
