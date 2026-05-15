@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "lint": "node --check backend/server.js backend/tests/server.test.js",
-    "test": "node --test backend/tests/server.test.js",
+    "test": "node --test --experimental-test-coverage backend/tests/server.test.js",
     "build": "echo 'Building application...'",
     "start": "node backend/server.js"
   },
