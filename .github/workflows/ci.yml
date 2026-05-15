@@ -78,7 +78,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: app/backend/tests
+          path: app/coverage/
           retention-days: 7
 
   build:
