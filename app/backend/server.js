@@ -155,6 +155,10 @@ if (require.main === module) {
     });
 }
 
+function mySubtract(a, b) {
+    return a - b;
+}
+
 module.exports = {
     validateProduct,
     validateProductName,
@@ -164,5 +168,6 @@ module.exports = {
     handlePostItems,
     handleGetStats,
     pg,
-    redis
+    redis,
+    mySubtract
 };
