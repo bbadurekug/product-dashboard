@@ -149,7 +149,7 @@ app.get('/api/health', (req, res) => {
     res.json({ status: "ok" });
 });
 
-if (process.env.NODE_ENV !== 'test') {
+if (require.main === module) {
     app.listen(PORT, () => {
         console.log(`Serwer nasłuchuje na porcie: ${PORT}`);
     });
