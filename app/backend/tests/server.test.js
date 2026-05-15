@@ -28,7 +28,7 @@ function createMockResponse(t) {
 
 //Walidacja
 test('Walidacja nazwy nowego produktu', () => {
-    assert.strictEqual(validateProductName('   ').isValid, true);
+    assert.strictEqual(validateProductName('   ').isValid, false);
     assert.strictEqual(validateProductName(null).isValid, false);
     assert.strictEqual(validateProductName(undefined).isValid, false);
     assert.strictEqual(validateProductName(123).isValid, false);
